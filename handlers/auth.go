@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var jwtSecret = []byte("my-scret-123")
+var jwtSecret = []byte("my-secret-123")
 
 type LoginRequest struct {
 	Username string `json:"username`
