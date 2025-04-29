@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Opening struct {
+type User struct {
 	gorm.Model
 	Id       int64
 	Name     string
