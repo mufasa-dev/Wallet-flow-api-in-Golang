@@ -9,7 +9,10 @@ import (
 )
 
 func initializeRoutes(router *gin.Engine) {
-	router.POST("/login", handlers.Login)
+	handlers.InitializeHandler()
+
+	router.POST("/sigin", handlers.Login)
+	router.POST("/sigup", handlers.CreateUserHandler)
 
 	v1 := router.Group("/api/v1")
 	v1.Use(middleware.AuthMiddleware())
@@ -20,7 +23,6 @@ func initializeRoutes(router *gin.Engine) {
 				"msg": "GET Opening",
 			})
 		})
-		v1.POST("user", handlers.CreateUserHandler)
 
 		v1.PUT("user", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
