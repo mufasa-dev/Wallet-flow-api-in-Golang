@@ -20,11 +20,8 @@ func initializeRoutes(router *gin.Engine) {
 				"msg": "GET Opening",
 			})
 		})
-		v1.POST("user", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "GET Opening",
-			})
-		})
+		v1.POST("user", handlers.CreateUserHandler)
+
 		v1.PUT("user", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
 				"msg": "GET Opening",
