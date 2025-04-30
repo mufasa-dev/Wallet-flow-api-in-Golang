@@ -1,9 +1,17 @@
 package handlers
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/mufasa-dev/Wallet-flow-api-in-Golang/utils"
+)
 
 func errParamIsRequired(name, typ string) error {
 	return fmt.Errorf("param %s (type: %s) is required", name, typ)
+}
+
+func errParamIsInvalid(name string) error {
+	return fmt.Errorf("param %s is invalid", name)
 }
 
 // Create user
@@ -23,10 +31,13 @@ func (r *CreateUserRequest) Validate() error {
 		return errParamIsRequired("name", "string")
 	}
 	if r.Password == "" {
-		return errParamIsRequired("name", "string")
+		return errParamIsRequired("password", "string")
 	}
 	if r.CPF == "" {
-		return errParamIsRequired("name", "string")
+		return errParamIsRequired("CPF", "string")
+	}
+	if !utils.ValidateCPF(r.CPF) {
+		return errParamIsInvalid("CPF")
 	}
 	return nil
 }
