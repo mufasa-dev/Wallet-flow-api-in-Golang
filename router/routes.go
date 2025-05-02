@@ -29,10 +29,6 @@ func initializeRoutes(router *gin.Engine) {
 				"msg": "GET Opening",
 			})
 		})
-		v1.POST("users", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "GET Opening",
-			})
-		})
+		v1.DELETE("user", handlers.DeleteUserHandler)
 	}
 }
