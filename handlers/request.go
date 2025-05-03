@@ -41,3 +41,22 @@ func (r *CreateUserRequest) Validate() error {
 	}
 	return nil
 }
+
+// Update user
+type UpdateUserRequest struct {
+	Name     string  `json:"name"`
+	Password string  `json:"password"`
+	CPF      string  `json:"cpf"`
+	Account  string  `json:"account"`
+	Wallet   float64 `json:"wallet"`
+}
+
+func (r *UpdateUserRequest) Validate() error {
+	if r.CPF != "" && !utils.ValidateCPF(r.CPF) {
+		return errParamIsInvalid("CPF")
+	}
+	if r.Name != "" || r.CPF != "" || r.Password != "" {
+		return nil
+	}
+	return fmt.Errorf("at least one valid field must be provided")
+}
