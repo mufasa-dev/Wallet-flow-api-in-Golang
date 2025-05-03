@@ -18,11 +18,7 @@ func initializeRoutes(router *gin.Engine) {
 	v1.Use(middleware.AuthMiddleware())
 	{
 
-		v1.GET("user", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "GET Opening",
-			})
-		})
+		v1.GET("user", handlers.ListUserHandler)
 
 		v1.PUT("user", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
