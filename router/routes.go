@@ -1,8 +1,6 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/mufasa-dev/Wallet-flow-api-in-Golang/handlers"
 	"github.com/mufasa-dev/Wallet-flow-api-in-Golang/middleware"
@@ -17,15 +15,9 @@ func initializeRoutes(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	v1.Use(middleware.AuthMiddleware())
 	{
-
 		v1.GET("users", handlers.ListUserHandler)
 		v1.GET("user", handlers.ShowUserHandler)
-
-		v1.PUT("user", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{
-				"msg": "GET Opening",
-			})
-		})
+		v1.PUT("user", handlers.UpdateUserHandler)
 		v1.DELETE("user", handlers.DeleteUserHandler)
 	}
 }
