@@ -18,7 +18,8 @@ func initializeRoutes(router *gin.Engine) {
 	v1.Use(middleware.AuthMiddleware())
 	{
 
-		v1.GET("user", handlers.ListUserHandler)
+		v1.GET("users", handlers.ListUserHandler)
+		v1.GET("user", handlers.ShowUserHandler)
 
 		v1.PUT("user", func(ctx *gin.Context) {
 			ctx.JSON(http.StatusOK, gin.H{
