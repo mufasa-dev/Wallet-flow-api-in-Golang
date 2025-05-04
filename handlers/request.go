@@ -72,3 +72,22 @@ func (r *DepositWithDrawRequest) Validate() error {
 	}
 	return nil
 }
+
+// Transfer
+type TransferRequest struct {
+	RecipientCPF string  `json:"recipient_cpf"`
+	Amount       float64 `json:"amount"`
+}
+
+func (r *TransferRequest) Validate() error {
+	if r.RecipientCPF == "" {
+		return errParamIsRequired("recipient_cpf", "string")
+	}
+	if !utils.ValidateCPF(r.RecipientCPF) {
+		return errParamIsInvalid("recipient_cpf")
+	}
+	if r.Amount <= 0 {
+		return errParamIsInvalid("amount")
+	}
+	return nil
+}
