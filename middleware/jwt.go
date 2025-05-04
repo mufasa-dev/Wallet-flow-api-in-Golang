@@ -2,12 +2,13 @@ package middleware
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var jwtSecret = []byte("my-secret-123")
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -33,10 +34,11 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			c.Set("username", claims["username"])
+			c.Set("user_id", claims["user_id"])
 			c.Next()
 		} else {
 			print("token", token)
-			c.JSON(http.StatusUnauthorized, gin.H{"error": err})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			c.Abort()
 		}
 	}

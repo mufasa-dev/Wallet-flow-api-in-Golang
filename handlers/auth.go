@@ -100,10 +100,10 @@ func CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func GetUserIdFromJWT(c *gin.Context) (string, error) {
+func GetUserIdFromJWT(c *gin.Context) (uint, error) {
 	tokenString := c.GetHeader("Authorization")
 	if tokenString == "" {
-		return "", http.ErrNoCookie
+		return 0, http.ErrNoCookie
 	}
 
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
@@ -113,13 +113,13 @@ func GetUserIdFromJWT(c *gin.Context) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userId := claims["user_id"].(string)
-		return userId, nil
+		userId := claims["user_id"].(float64)
+		return uint(userId), nil
 	}
 
-	return "", jwt.ErrSignatureInvalid
+	return 0, jwt.ErrSignatureInvalid
 }
