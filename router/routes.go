@@ -20,5 +20,6 @@ func initializeRoutes(router *gin.Engine) {
 		v1.PUT("user", handlers.UpdateUserHandler)
 		v1.DELETE("user", handlers.DeleteUserHandler)
 		v1.POST("withdraw", handlers.WithdrawHandler)
+		v1.POST("deposit", handlers.DepositHandler)
 	}
 }
