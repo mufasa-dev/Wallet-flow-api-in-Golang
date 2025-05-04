@@ -60,3 +60,15 @@ func (r *UpdateUserRequest) Validate() error {
 	}
 	return fmt.Errorf("at least one valid field must be provided")
 }
+
+// Deposit or withdraw
+type DepositWithDrawRequest struct {
+	Amount float64 `json:"amount"`
+}
+
+func (r *DepositWithDrawRequest) Validate() error {
+	if r.Amount <= 0 {
+		return errParamIsInvalid("Amount")
+	}
+	return nil
+}
