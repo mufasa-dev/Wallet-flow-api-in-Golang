@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtSecret = os.Getenv("JWT_SECRET")
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 type LoginRequest struct {
 	Username string `json:"username"`
@@ -37,8 +38,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := GenetareJWT(req.Username)
+	token, err := GenetareJWT(storedUser.ID, req.Username)
 	if err != nil {
+		logger.Errorf("validation error: %v", err.Error())
 		sendError(c, http.StatusInternalServerError, "Failed to generate token")
 		return
 	}
@@ -79,8 +81,9 @@ func CreateUserHandler(ctx *gin.Context) {
 	sendSuccess(ctx, "create-user", user)
 }
 
-func GenetareJWT(username string) (string, error) {
+func GenetareJWT(id uint, username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id":  id,
 		"username": username,
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	})
@@ -95,4 +98,28 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func GetUserIdFromJWT(c *gin.Context) (string, error) {
+	tokenString := c.GetHeader("Authorization")
+	if tokenString == "" {
+		return "", http.ErrNoCookie
+	}
+
+	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return jwtSecret, nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		userId := claims["user_id"].(string)
+		return userId, nil
+	}
+
+	return "", jwt.ErrSignatureInvalid
 }
