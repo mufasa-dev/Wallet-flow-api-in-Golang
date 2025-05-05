@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,8 @@ func WithdrawHandler(ctx *gin.Context) {
 		return
 	}
 
+	tx := db.Begin()
+
 	user := schemas.User{}
 	if err := db.First(&user, id).Error; err != nil {
 		logger.Errorf("error finding user by id: %v", id)
@@ -40,6 +43,22 @@ func WithdrawHandler(ctx *gin.Context) {
 	if err := db.Save(&user).Error; err != nil {
 		logger.Errorf("error updating user: %v", err.Error())
 		sendError(ctx, http.StatusInternalServerError, "error updating user")
+		return
+	}
+
+	historic := schemas.Historic{
+		Action:  "withdraw",
+		Comment: "",
+		UserId:  id,
+	}
+
+	if err := db.Create(&historic).Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "error saving historic")
+		return
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "transaction commit failed")
 		return
 	}
 
@@ -62,6 +81,8 @@ func DepositHandler(ctx *gin.Context) {
 		return
 	}
 
+	tx := db.Begin()
+
 	user := schemas.User{}
 	if err := db.First(&user, id).Error; err != nil {
 		logger.Errorf("error finding user by id: %v", id)
@@ -74,6 +95,22 @@ func DepositHandler(ctx *gin.Context) {
 	if err := db.Save(&user).Error; err != nil {
 		logger.Errorf("error updating user: %v", err.Error())
 		sendError(ctx, http.StatusInternalServerError, "error updating user")
+		return
+	}
+
+	historic := schemas.Historic{
+		Action:  "deposit",
+		Comment: "",
+		UserId:  id,
+	}
+
+	if err := db.Create(&historic).Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "error saving historic")
+		return
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "transaction commit failed")
 		return
 	}
 
@@ -134,6 +171,17 @@ func TransferHandler(ctx *gin.Context) {
 	if err := db.Save(&recipient).Error; err != nil {
 		logger.Errorf("error updating user recipient: %v", err.Error())
 		sendError(ctx, http.StatusInternalServerError, "error updating user")
+		return
+	}
+
+	historic := schemas.Historic{
+		Action:  "transfer",
+		Comment: fmt.Sprintf("transfer R$%v to %v", request.Amount, recipient.Name),
+		UserId:  id,
+	}
+
+	if err := db.Create(&historic).Error; err != nil {
+		sendError(ctx, http.StatusInternalServerError, "error saving historic")
 		return
 	}
 

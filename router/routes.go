@@ -22,5 +22,6 @@ func initializeRoutes(router *gin.Engine) {
 		v1.POST("withdraw", handlers.WithdrawHandler)
 		v1.POST("deposit", handlers.DepositHandler)
 		v1.POST("transfer", handlers.TransferHandler)
+		v1.GET("statement", handlers.StatementHandler)
 	}
 }
