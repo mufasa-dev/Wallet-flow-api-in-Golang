@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+	"math/rand"
 	"net/http"
 	"os"
 	"strings"
@@ -65,10 +67,13 @@ func CreateUserHandler(ctx *gin.Context) {
 		return
 	}
 
+	accountNumer := generateAccountNumer()
+
 	user := schemas.User{
 		Name:     request.Name,
 		Password: hashedPassword,
 		CPF:      request.CPF,
+		Account:  accountNumer,
 		Wallet:   request.Wallet,
 	}
 
@@ -98,6 +103,11 @@ func HashPassword(password string) (string, error) {
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func generateAccountNumer() string {
+	rand.Seed(time.Now().UnixNano())
+	return fmt.Sprintf("%08d", rand.Intn(100000000))
 }
 
 func GetUserIdFromJWT(c *gin.Context) (uint, error) {
