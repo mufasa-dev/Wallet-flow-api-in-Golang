@@ -43,6 +43,7 @@ POST	/api/v1/withdraw	Withdraw funds from account
 POST	/api/v1/transfer	Transfer money between users
 ### 📜 Account Info
 Method	Endpoint	Description
+
 GET	/statement	View transaction history
 ## 🔧 Environment Variables
 Create a .env file and define the following:
