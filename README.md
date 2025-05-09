@@ -2,7 +2,7 @@
 
 Welcome to Wallet API! 🔐💳 This API allows users to create accounts, log in securely using JWT and bcrypt, and perform transactions like withdrawals, deposits, and transfers between accounts.
 
-![Skills](https://skills.syvixor.com/api/icons?i=go,gin,sqlite,jwt,swagger,github,vscode)
+![Skills](https://skills.syvixor.com/api/icons?i=go,gin,sqlite,jwt,swagger,github,vscode,postman)
 
 ## 🚀 Features
 - 🔑 User registration with encrypted passwords using **bcrypt**
