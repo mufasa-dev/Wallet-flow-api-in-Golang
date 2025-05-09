@@ -8,6 +8,54 @@ import (
 	"github.com/mufasa-dev/Wallet-flow-api-in-Golang/schemas"
 )
 
+//@BasePath /
+
+// @Sumary Create User
+// @Description Create a new user
+// @Tags Sigup
+// @Accept json
+// @Produce json
+// @Param request body CreateUserRequest true "Request Body"
+// @Success 200 {object} CreateUserResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /signup [post]
+func CreateUserHandler(ctx *gin.Context) {
+	request := CreateUserRequest{}
+
+	ctx.BindJSON(&request)
+
+	if err := request.Validate(); err != nil {
+		logger.Errorf("validation error: %v", err.Error())
+		sendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	hashedPassword, err := HashPassword(request.Password)
+	if err != nil {
+		sendError(ctx, http.StatusInternalServerError, "Error processing password")
+		return
+	}
+
+	accountNumer := generateAccountNumer()
+
+	user := schemas.User{
+		Name:     request.Name,
+		Password: hashedPassword,
+		CPF:      request.CPF,
+		Account:  accountNumer,
+		Wallet:   request.Wallet,
+	}
+
+	if err := db.Create(&user).Error; err != nil {
+		logger.Errorf("error create opening %v", err.Error())
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	sendSuccess(ctx, "create-user", user)
+}
+
 func ListUserHandler(ctx *gin.Context) {
 	users := []schemas.User{}
 

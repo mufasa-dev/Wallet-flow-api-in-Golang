@@ -1,4 +1,82 @@
+definitions:
+  handlers.CreateUserRequest:
+    properties:
+      account:
+        type: string
+      cpf:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      wallet:
+        type: number
+    type: object
+  handlers.CreateUserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schemas.UserResponse'
+      message:
+        type: string
+    type: object
+  handlers.ErrorResponse:
+    properties:
+      errorCode:
+        type: string
+      message:
+        type: string
+    type: object
+  schemas.UserResponse:
+    properties:
+      account:
+        type: string
+      cpf:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      updatedAt:
+        type: string
+      wallet:
+        type: number
+    type: object
 info:
   contact: {}
-paths: {}
+paths:
+  /signin:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.CreateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      tags:
+      - Sigin
 swagger: "2.0"
