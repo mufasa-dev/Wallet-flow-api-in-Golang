@@ -8,7 +8,7 @@ import (
 	"github.com/mufasa-dev/Wallet-flow-api-in-Golang/schemas"
 )
 
-//@BasePath /
+// @BasePath /
 
 // @Sumary Create User
 // @Description Create a new user

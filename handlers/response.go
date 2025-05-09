@@ -33,8 +33,3 @@ type CreateUserResponse struct {
 	Message string               `json:"message"`
 	Data    schemas.UserResponse `json:"data"`
 }
-
-type LoginResponse struct {
-	Message string `json:"message"`
-	Data    string `json:"data"`
-}

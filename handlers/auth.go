@@ -21,6 +21,22 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+type LoginResponse struct {
+	Token string `json:"token"`
+}
+
+// @BasePath /
+
+// @Sumary Create User
+// @Description Create a new user
+// @Tags Sigin
+// @Accept json
+// @Produce json
+// @Param request body LoginRequest true "Request Body"
+// @Success 200 {object} LoginResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /signin [post]
 func Login(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

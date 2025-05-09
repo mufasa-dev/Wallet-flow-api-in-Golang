@@ -26,6 +26,18 @@ definitions:
       message:
         type: string
     type: object
+  handlers.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
   schemas.UserResponse:
     properties:
       account:
@@ -61,6 +73,35 @@ paths:
         name: request
         required: true
         schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      tags:
+      - Sigin
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
           $ref: '#/definitions/handlers.CreateUserRequest'
       produces:
       - application/json
@@ -78,5 +119,5 @@ paths:
           schema:
             $ref: '#/definitions/handlers.ErrorResponse'
       tags:
-      - Sigin
+      - Sigup
 swagger: "2.0"
