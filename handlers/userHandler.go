@@ -8,7 +8,7 @@ import (
 	"github.com/mufasa-dev/Wallet-flow-api-in-Golang/schemas"
 )
 
-// @BasePath /
+// @BasePath /api/v1
 
 // @Sumary Create User
 // @Description Create a new user
@@ -56,6 +56,18 @@ func CreateUserHandler(ctx *gin.Context) {
 	sendSuccess(ctx, "create-user", user)
 }
 
+// @BasePath /api/v1
+
+// @Sumary Get Users
+// @Description Retrieve a list of registered users (Require authentication)
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {array} schemas.UserResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /users [get]
 func ListUserHandler(ctx *gin.Context) {
 	users := []schemas.User{}
 
@@ -67,6 +79,19 @@ func ListUserHandler(ctx *gin.Context) {
 	sendSuccess(ctx, "list-user", users)
 }
 
+// @BasePath /
+
+// @Sumary Get User
+// @Description Retrieve a registered user (Require authentication)
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id query string true "User ID"
+// @Security BearerAuth
+// @Success 200 {object} schemas.UserResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /user [get]
 func ShowUserHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
 	if id == "" {
