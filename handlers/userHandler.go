@@ -108,6 +108,20 @@ func ShowUserHandler(ctx *gin.Context) {
 	sendSuccess(ctx, "show-user", user)
 }
 
+// @BasePath /
+
+// @Sumary Update User
+// @Description Update a registered user (Require authentication)
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param request body UpdateUserRequest true "Request Body"
+// @Param id query string true "User ID"
+// @Security BearerAuth
+// @Success 200 {object} schemas.UserResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /user [put]
 func UpdateUserHandler(ctx *gin.Context) {
 	request := UpdateUserRequest{}
 

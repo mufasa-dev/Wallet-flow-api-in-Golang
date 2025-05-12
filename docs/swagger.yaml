@@ -38,6 +38,19 @@ definitions:
       token:
         type: string
     type: object
+  handlers.UpdateUserRequest:
+    properties:
+      account:
+        type: string
+      cpf:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      wallet:
+        type: number
+    type: object
   schemas.UserResponse:
     properties:
       account:
@@ -62,30 +75,6 @@ definitions:
 info:
   contact: {}
 paths:
-  /api/v1/users:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a list of registered users (Require authentication)
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/schemas.UserResponse'
-            type: array
-        "401":
-          description: Unauthorized
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/handlers.ErrorResponse'
-      security:
-      - BearerAuth: []
   /signin:
     post:
       consumes:
@@ -172,4 +161,62 @@ paths:
             $ref: '#/definitions/handlers.ErrorResponse'
       security:
       - BearerAuth: []
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Update a registered user (Require authentication)
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      tags:
+      - Users
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of registered users (Require authentication)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/schemas.UserResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      tags:
+      - Users
 swagger: "2.0"
