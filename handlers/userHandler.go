@@ -171,6 +171,19 @@ func UpdateUserHandler(ctx *gin.Context) {
 	sendSuccess(ctx, "update-user", request)
 }
 
+// @BasePath /
+
+// @Sumary Delete User
+// @Description Delete a registered user (Require authentication)
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id query string true "User ID"
+// @Security BearerAuth
+// @Success 200 {object} schemas.UserResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /user [delete]
 func DeleteUserHandler(ctx *gin.Context) {
 	id := ctx.Query("id")
 	if id == "" {

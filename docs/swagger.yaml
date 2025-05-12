@@ -134,6 +134,35 @@ paths:
       tags:
       - Sigup
   /user:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a registered user (Require authentication)
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/schemas.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - BearerAuth: []
+      tags:
+      - Users
     get:
       consumes:
       - application/json
@@ -174,6 +203,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/handlers.UpdateUserRequest'
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
